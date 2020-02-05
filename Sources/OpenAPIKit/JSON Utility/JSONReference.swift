@@ -34,6 +34,10 @@ public struct RefDict<Root: ReferenceRoot, Name: RefName, RefType: Equatable & C
     public typealias Key = String
 
     let dict: OrderedDictionary<String, RefType>
+    
+    public var keys: [Key] {
+      return dict.keys
+    }
 
     public init(_ dict: OrderedDictionary<String, RefType>) {
         self.dict = dict
