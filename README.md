@@ -2,8 +2,6 @@
 
 # OpenAPIKit
 
-:warning: This repository was recently renamed `mattpolzin/OpenAPIKit` in order to align the repository and package names. For now, GitHub appears to be redirecting `mattpolzin/OpenAPI` to the new location, but I recommend updating your package configurations anyway.
-
 A library containing Swift types that encode to- and decode from [OpenAPI](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md) Documents and their components.
 
 <!-- TOC depthFrom:2 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -57,6 +55,17 @@ You can decode a JSON OpenAPI document (i.e. using the `JSONDecoder` from **Foun
 ```swift
 let decoder = ... // JSONDecoder() or YAMLDecoder()
 let openAPIDoc = try decoder.decode(OpenAPI.Document, from: ...)
+```
+
+#### Decoding Errors
+You can wrap any error you get back from a decoder in `OpenAPI.Error` to get a friendlier human-readable description from `localizedDescription`.
+
+```swift
+do {
+  try decoder.docode(OpenAPI.Document, from: ...)
+} catch let error {
+  print(OpenAPI.Error(from: error).localizedDescription)  
+}
 ```
 
 ### Encoding OpenAPI Documents
@@ -216,6 +225,7 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] security
 - [x] tags
 - [x] externalDocs
+- [ ] specification extensions
 
 ### Info Object (`OpenAPI.Document.Info`)
 - [x] title
@@ -224,25 +234,30 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] contact
 - [x] license
 - [x] version
+- [ ] specification extensions
 
 ### Contact Object (`OpenAPI.Document.Info.Contact`)
 - [x] name
 - [x] url
 - [x] email
+- [ ] specification extensions
 
 ### License Object (`OpenAPI.Document.Info.License`)
 - [x] name
 - [x] url
+- [ ] specification extensions
 
 ### Server Object (`OpenAPI.Server`)
 - [x] url
 - [x] description
 - [x] variables
+- [ ] specification extensions
 
 ### Server Variable Object (`OpenAPI.Server.Variable`)
 - [x] enum
 - [x] default
 - [x] description
+- [ ] specification extensions
 
 ### Components Object (`OpenAPI.Components`)
 - [x] schemas
@@ -254,9 +269,11 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] securitySchemes
 - [ ] links
 - [ ] callbacks
+- [ ] specification extensions
 
 ### Paths Object (`OpenAPI.PathItem.Map`)
 - [x] *dictionary*
+- ~[ ] specification extensions~ (not a planned addition)
 
 ### Path Item Object (`OpenAPI.PathItem`)
 - [x] summary
@@ -271,6 +288,7 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] head
 - [x] patch
 - [x] trace
+- [ ] specification extensions
 
 ### Operation Object (`OpenAPI.PathItem.Operation`)
 - [x] tags
@@ -285,10 +303,12 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] deprecated
 - [x] security
 - [x] servers
+- [ ] specification extensions
 
 ### External Document Object (`OpenAPI.ExternalDoc`)
 - [x] description
 - [x] url
+- [ ] specification extensions
 
 ### Parameter Object (`OpenAPI.PathItem.Parameter`)
 - [x] name
@@ -304,11 +324,13 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
     - [x] allowReserved
     - [x] example
     - [x] examples
+- [ ] specification extensions
 
 ### Request Body Object (`OpenAPI.Request`)
 - [x] description
 - [x] content
 - [x] required
+- [ ] specification extensions
 
 ### Media Type Object (`OpenAPI.Content`)
 - [x] schema
@@ -323,18 +345,22 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] style
 - [x] explode
 - [x] allowReserved
+- [ ] specification extensions
 
 ### Responses Object (`OpenAPI.Response.Map`)
 - [x] *dictionary*
+- ~[ ] specification extensions~ (not a planned addition)
 
 ### Response Object (`OpenAPI.Response`)
 - [x] description
 - [x] headers
 - [x] content
 - [ ] links
+- [ ] specification extensions
 
 ### Callback Object
 - [ ] *{expression}*
+- [ ] specification extensions
 
 ### Example Object (`OpenAPI.Example`)
 - [x] summary
@@ -350,6 +376,7 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [ ] requestBody
 - [ ] description
 - [ ] server
+- [ ] specification extensions
 
 ### Header Object (`OpenAPI.Header`)
 - [x] description
@@ -357,16 +384,18 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] deprecated
 - [x] content
 - [x] schema
-    - [ ] style
-    - [ ] explode
-    - [ ] allowReserved
-    - [ ] example
-    - [ ] examples
+    - [x] style
+    - [x] explode
+    - [x] allowReserved
+    - [x] example
+    - [x] examples
+- [ ] specification extensions
 
 ### Tag Object (`OpenAPI.Tag`)
 - [x] name
 - [x] description
 - [x] externalDocs
+- [ ] specification extensions
 
 ### Reference Object (`JSONReference`)
 - [x] $ref
@@ -381,15 +410,15 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 
 ### Schema Object (`JSONSchema`)
 - [x] Mostly complete support for JSON Schema inherited keywords
-- [ ] Specification Extensions
 - [x] nullable
 - [ ] discriminator
-- [ ] readOnly
-- [ ] writeOnly
+- [x] readOnly (`permissions` `.readOnly` case)
+- [x] writeOnly (`permissions` `.writeOnly` case)
 - [ ] xml
 - [x] externalDocs
 - [x] example
-- [ ] deprecated
+- [x] deprecated
+- [ ] specification extensions
 
 ### Discriminator Object (`OpenAPI.Discriminator`)
 - [x] propertyName
@@ -401,6 +430,7 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] prefix
 - [x] attribute
 - [x] wrapped
+- [ ] specification extensions
 
 ### Security Scheme Object (`OpenAPI.SecurityScheme`)
 - [x] type
@@ -411,12 +441,14 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] bearerFormat (`SecurityType` `.http` case)
 - [x] flows (`SecurityType` `.oauth2` case)
 - [x] openIdConnectUrl (`SecurityType` `.openIdConnect` case)
+- [ ] specification extensions
 
 ### OAuth Flows Object (`OpenAPI.OauthFlows`)
 - [x] implicit
 - [x] password
 - [x] clientCredentials
 - [x] authorizationCode
+- [ ] specification extensions
 
 ### OAuth Flow Object (`OpenAPI.OauthFlows.*`)
 - `OpenAPI.OauthFlows.Implicit`
@@ -427,6 +459,7 @@ See [**A note on dictionary ordering**](#a-note-on-dictionary-ordering) before d
 - [x] tokenUrl
 - [x] refreshUrl
 - [x] scopes
+- [ ] specification extensions
 
 ### Security Requirement Object (`OpenAPI.Document.SecurityRequirement`)
 - [x] *{name}* (using `JSONReferences` instead of a stringy API)
